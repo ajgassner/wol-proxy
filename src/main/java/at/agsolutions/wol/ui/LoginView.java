@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
 
-
 @SpringComponent
 @UIScope
 public class LoginView extends VerticalLayout {
@@ -31,9 +30,11 @@ public class LoginView extends VerticalLayout {
 	@Autowired
 	private AccessControl accessControl;
 
+	@Autowired
+	private MainView mainView;
+
 	private TextField userNameField;
 	private PasswordField passwordField;
-	private ShortcutListener shortcutListener;
 
 	@PostConstruct
 	private void buildLayout() {
@@ -46,7 +47,7 @@ public class LoginView extends VerticalLayout {
 		setComponentAlignment(container, Alignment.MIDDLE_CENTER);
 
 		Label title = new Label(appName);
-		title.setStyleName(ValoTheme.LABEL_H3);
+		title.setStyleName(ValoTheme.LABEL_H1);
 		title.setWidthUndefined();
 		container.addComponent(title);
 		container.setComponentAlignment(title, Alignment.BOTTOM_CENTER);
@@ -56,7 +57,7 @@ public class LoginView extends VerticalLayout {
 		form.setMargin(true);
 
 		userNameField = new TextField("Username");
-		userNameField.setDescription("Geben Sie hier Ihren Benutzernamen ein");
+		userNameField.setDescription("Please enter your username");
 		userNameField.setRequired(true);
 		userNameField.setIcon(FontAwesome.USER);
 		userNameField.setWidth(250, Unit.PIXELS);
@@ -65,14 +66,14 @@ public class LoginView extends VerticalLayout {
 		form.addComponent(userNameField);
 
 		passwordField = new PasswordField("Password");
-		passwordField.setDescription("Geben Sie hier Ihr Passwort ein");
+		passwordField.setDescription("Please enter your password");
 		passwordField.setRequired(true);
 		passwordField.setIcon(FontAwesome.LOCK);
 		passwordField.setWidth(250, Unit.PIXELS);
 		passwordField.setImmediate(true);
 		form.addComponent(passwordField);
 
-		Panel formPanel = new Panel("User data");
+		Panel formPanel = new Panel("User login");
 		formPanel.setContent(form);
 		container.addComponent(formPanel);
 
@@ -82,10 +83,7 @@ public class LoginView extends VerticalLayout {
 		loginButton.addClickListener(e -> loginClick());
 		container.addComponent(loginButton);
 
-		if (shortcutListener != null) {
-			removeShortcutListener(shortcutListener);
-		}
-		shortcutListener = new Button.ClickShortcut(loginButton, ShortcutAction.KeyCode.ENTER);
+		ShortcutListener shortcutListener = new Button.ClickShortcut(loginButton, ShortcutAction.KeyCode.ENTER);
 		addShortcutListener(shortcutListener);
 	}
 
@@ -99,20 +97,13 @@ public class LoginView extends VerticalLayout {
 		try {
 			currentUser = accessControl.login(userNameField.getValue(), passwordField.getValue());
 		} catch (IUserService.WrongPasswordException | IUserService.UserNotFoundException e) {
-			showLoginMessage(
-					"Anmeldung fehlgeschlagen",
-					"Benutzername und Passwort unterscheiden Groß- und Kleinschreibung!",
-					MessageType.WARNING);
+			showLoginMessage("Login failed", "Username and password are case sensitive!", MessageType.WARNING);
 		}
 
 		if (currentUser != null) {
-			showLoginMessage("Willkommen " + currentUser.getName(),
-					"Ihre Anmeldung war erfolgreich",
-					MessageType.INFO);
-			//UI.getCurrent().setContent(mainScreenPresenter.getView());
+			showLoginMessage("Welcome " + currentUser.getName(), "You are now logged in", MessageType.INFO);
+			UI.getCurrent().setContent(mainView);
 		}
-
-		validateInput();
 	}
 
 	private boolean validateInput() {
@@ -121,8 +112,8 @@ public class LoginView extends VerticalLayout {
 			passwordField.validate();
 			return true;
 		} catch (Validator.EmptyValueException e) {
-			userNameField.setRequiredError("Der Benutzername muss ausgefüllt werden");
-			passwordField.setRequiredError("Bitte geben Sie ein Passwort an");
+			userNameField.setRequiredError("Username is required");
+			passwordField.setRequiredError("Password is required");
 			return false;
 		}
 	}
