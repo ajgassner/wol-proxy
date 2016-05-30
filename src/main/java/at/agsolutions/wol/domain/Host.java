@@ -19,5 +19,8 @@ public class Host {
 	private String mac;
 
 	@XmlAttribute
-	private String ip;
+	private String broadcastIp;
+
+	@XmlAttribute
+	private int port;
 }

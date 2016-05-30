@@ -9,10 +9,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 @Slf4j
 public class WolUtil {
+
+	private static final String HASH_ALGORITHM = "SHA-256";
 
 	private WolUtil() {
 		// prevent initialization
@@ -28,5 +33,26 @@ public class WolUtil {
 		}
 
 		return Optional.empty();
+	}
+
+	public static String generateSha256(String input) {
+		MessageDigest digest;
+		try {
+			digest = MessageDigest.getInstance(HASH_ALGORITHM);
+		} catch (NoSuchAlgorithmException e) {
+			log.error("Error generating hash", e);
+			return null;
+		}
+
+		byte[] hash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+		StringBuilder hexString = new StringBuilder();
+
+		for (final byte b : hash) {
+			String hex = Integer.toHexString(0xff & b);
+			if (hex.length() == 1) hexString.append('0');
+			hexString.append(hex);
+		}
+
+		return hexString.toString();
 	}
 }

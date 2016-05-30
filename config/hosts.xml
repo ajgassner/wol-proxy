@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hosts>
-    <host name="kinglui" mac="AB:1F" ip="192.168.1.10" />
+    <!-- mac address can be written with - or : -->
+    <host name="example1" mac="00:14:22:01:23:45" broadcastIp="192.168.1.255" />
+    <!-- port is optional -->
+    <host name="example2" mac="00-14-22-01-23-45" broadcastIp="192.168.1.255" port="9" />
 </hosts>

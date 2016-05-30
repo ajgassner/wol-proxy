@@ -35,7 +35,7 @@ public class XmlUserService implements IUserService {
 		User user = users.stream().filter(u -> u.getName().equals(userName)).findFirst().orElseThrow(() -> new
 				UserNotFoundException("User" + " with user name '" + userName + "' not found"));
 
-		if (!password.equals(user.getPassword())) {
+		if (user.getPassword() == null || !user.getPassword().equals(WolUtil.generateSha256(password))) {
 			throw new WrongPasswordException("Given password doesn't match");
 		}
 

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <users>
-    <user name="alex" password="gassner" />
+    <!-- Standard password is SHA-256 hashed: admin -->
+    <user name="admin" password="03588f50a68449d479401665b2d720e5ba9621ced1d1083765fbf6f561347f31" />
 </users>
