@@ -59,8 +59,7 @@ public class XmlHostService implements IHostService {
 		socket.send(packet);
 		socket.close();
 
-		log.info("WOL packet sent to host {}, with mac {}, broadcast IP {} and port {}", host.getName(), host.getMac(), host
-				.getBroadcastIp(), port);
+		log.info("WOL packet sent to {} and port {}", host, port);
 	}
 
 	private byte[] getMacBytes(String macStr) {

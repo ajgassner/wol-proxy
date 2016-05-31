@@ -1,0 +1,9 @@
+@import "scss/variables";
+@import "../valo/valo";
+
+@import "scss/common";
+
+@mixin wol {
+  @include valo;
+  @include common;
+}

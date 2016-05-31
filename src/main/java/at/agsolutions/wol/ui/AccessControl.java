@@ -1,4 +1,4 @@
-package at.agsolutions.wol;
+package at.agsolutions.wol.ui;
 
 import at.agsolutions.wol.domain.User;
 import at.agsolutions.wol.service.IUserService;

@@ -1,15 +1,14 @@
-package at.agsolutions.wol.ui;
+package at.agsolutions.wol.ui.view;
 
-import at.agsolutions.wol.AccessControl;
-import at.agsolutions.wol.MessageType;
+import at.agsolutions.wol.ui.MessageProvider;
+import at.agsolutions.wol.ui.MessageProvider.MessageType;
 import at.agsolutions.wol.domain.User;
 import at.agsolutions.wol.service.IUserService;
+import at.agsolutions.wol.ui.AccessControl;
 import com.vaadin.data.Validator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.server.Page;
-import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
@@ -22,7 +21,6 @@ import javax.annotation.PostConstruct;
 @SpringComponent
 @UIScope
 public class LoginView extends VerticalLayout {
-	private static final int NOTIFICATION_DELAY = 3000;
 
 	@Value("${app.name}")
 	private String appName;
@@ -80,14 +78,14 @@ public class LoginView extends VerticalLayout {
 		Button loginButton = new Button("Login");
 		loginButton.setWidth(100, Unit.PERCENTAGE);
 		loginButton.setIcon(FontAwesome.ANGLE_DOUBLE_RIGHT);
-		loginButton.addClickListener(e -> loginClick());
+		loginButton.addClickListener(e -> loginClicked());
 		container.addComponent(loginButton);
 
 		ShortcutListener shortcutListener = new Button.ClickShortcut(loginButton, ShortcutAction.KeyCode.ENTER);
 		addShortcutListener(shortcutListener);
 	}
 
-	private void loginClick() {
+	private void loginClicked() {
 		if (!validateInput()) {
 			return;
 		}
@@ -97,11 +95,12 @@ public class LoginView extends VerticalLayout {
 		try {
 			currentUser = accessControl.login(userNameField.getValue(), passwordField.getValue());
 		} catch (IUserService.WrongPasswordException | IUserService.UserNotFoundException e) {
-			showLoginMessage("Login failed", "Username and password are case sensitive!", MessageType.WARNING);
+			MessageProvider.showMessage("Login failed", "Username and password are case sensitive!", MessageType.ERROR);
 		}
 
 		if (currentUser != null) {
-			showLoginMessage("Welcome " + currentUser.getName(), "You are now logged in", MessageType.INFO);
+			MessageProvider.showMessage("Welcome " + currentUser.getName(), "You are now logged in");
+			mainView.init();
 			UI.getCurrent().setContent(mainView);
 		}
 	}
@@ -116,27 +115,5 @@ public class LoginView extends VerticalLayout {
 			passwordField.setRequiredError("Password is required");
 			return false;
 		}
-	}
-
-	private void showLoginMessage(String title, String message, MessageType type) {
-		Notification notification = new Notification(title, message);
-		notification.setDelayMsec(NOTIFICATION_DELAY);
-		notification.setPosition(Position.TOP_CENTER);
-
-		switch (type) {
-			case INFO:
-				notification.setStyleName(Notification.Type.HUMANIZED_MESSAGE.getStyle());
-				notification.setIcon(FontAwesome.INFO);
-				break;
-			case WARNING:
-				notification.setStyleName(Notification.Type.WARNING_MESSAGE.getStyle());
-				notification.setIcon(FontAwesome.WARNING);
-				break;
-			default:
-				notification.setStyleName(Notification.Type.ERROR_MESSAGE.getStyle());
-				notification.setIcon(FontAwesome.EXCLAMATION_CIRCLE);
-		}
-
-		notification.show(Page.getCurrent());
 	}
 }

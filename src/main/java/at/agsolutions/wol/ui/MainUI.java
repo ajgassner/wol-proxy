@@ -1,8 +1,9 @@
-package at.agsolutions.wol;
+package at.agsolutions.wol.ui;
 
-import at.agsolutions.wol.ui.LoginView;
+import at.agsolutions.wol.ui.view.LoginView;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
+import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
@@ -18,9 +19,10 @@ import java.util.logging.Logger;
 @PreserveOnRefresh
 @Push
 @SpringUI
+@Theme(MainUI.THEME)
 public class MainUI extends UI {
 
-	private static final String THEME = "valo";
+	public static final String THEME = "wol";
 
 	@Value("${app.name}")
 	private String appName;
@@ -36,7 +38,6 @@ public class MainUI extends UI {
 
 	@Override
 	protected void init(final VaadinRequest vaadinRequest) {
-		setTheme(THEME);
 		setLocale(Locale.ENGLISH);
 		getPage().setTitle(appName);
 		setContent(loginView);

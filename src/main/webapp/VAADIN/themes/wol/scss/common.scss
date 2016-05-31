@@ -1,0 +1,7 @@
+@import "variables";
+
+@mixin common {
+  .v-Notification.humanized h1 {
+    color: $v-friendly-color;
+  }
+}

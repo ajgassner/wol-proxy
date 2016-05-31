@@ -1,5 +1,11 @@
 target
-*.class
 lib
 .idea
 *.iml
+.DS_Store
+.classpath
+.project
+**/styles.scss.cache
+**/styles.css
+**/*.log*
+**/widgetsets/**/*
