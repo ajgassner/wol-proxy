@@ -5,12 +5,15 @@ Control WOL enabled devices over a simple web application based on Spring Boot a
 
 ![WOL proxy](/doc/screen.png?raw=true "WOL proxy")
 
-### How to run the application
+### Run the application
 
 - Adapt `config/hosts.xml` and `config/users.xml` to your needs
 - Run `mvn spring-boot:run` (Maven required)
 - Open `https://localhost:8443/` in your desired web browser
 - Enjoy ;)
+
+### Create a production-ready executable jar file with embedded Tomcat
+- Run `mvn package -Dproduction.mode=true` (Maven required)
 
 Licencing
 ---------
