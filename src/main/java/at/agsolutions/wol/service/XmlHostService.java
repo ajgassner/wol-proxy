@@ -20,6 +20,7 @@ import java.util.Collection;
 public class XmlHostService implements IHostService {
 
 	private static final int PORT = 9;
+	private static final int PING_TIMEOUT = 1000;
 
 	@Autowired
 	private Unmarshaller unmarshaller;
@@ -60,6 +61,12 @@ public class XmlHostService implements IHostService {
 		socket.close();
 
 		log.info("WOL packet sent to {} and port {}", host, port);
+	}
+
+	@Override
+	public boolean ping(final Host host) throws IOException {
+		InetAddress address = InetAddress.getByName(host.getIp());
+		return address.isReachable(PING_TIMEOUT);
 	}
 
 	private byte[] getMacBytes(String macStr) {

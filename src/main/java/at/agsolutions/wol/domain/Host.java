@@ -22,5 +22,8 @@ public class Host {
 	private String broadcastIp;
 
 	@XmlAttribute
+	private String ip;
+
+	@XmlAttribute
 	private int port;
 }

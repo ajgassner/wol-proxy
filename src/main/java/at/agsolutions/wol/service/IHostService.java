@@ -9,4 +9,6 @@ public interface IHostService {
 	Collection<Host> findAll();
 
 	void wakeOnLan(Host host) throws IOException;
+
+	boolean ping(Host host) throws IOException;
 }
