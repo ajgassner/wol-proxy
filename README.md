@@ -12,8 +12,12 @@ Control WOL enabled devices over a simple web application based on Spring Boot a
 - Open `https://localhost:8443/` in your desired web browser
 - Enjoy ;)
 
-### Create a production-ready executable jar file with embedded Tomcat
+### Create a production-ready executable WAR file with embedded Tomcat
 - Run `mvn package -Dproduction.mode=true` (Maven required)
+- Run `java -jar generated-war-file.war` or deploy the WAR file in a standalone Tomcat instance
+
+### Hints
+- To run/debug directly out of the IDE you have to add the spring-boot-starter-tomcat dependency to the startup classpath
 
 Licencing
 ---------
