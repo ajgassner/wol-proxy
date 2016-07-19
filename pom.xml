@@ -97,6 +97,8 @@
                     </excludes>
                     <!-- enable Maven properties substitution -->
                     <addResources>false</addResources>
+                    <!-- create executable for init.d -->
+                    <executable>true</executable>
                 </configuration>
             </plugin>
 
